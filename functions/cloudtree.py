@@ -121,7 +121,7 @@ def leaves_fills(leaves_sample, position, direction, length, cross_section):
             yield leaves_fill(leaves_sample, lower, upper)
 
 
-def branch_fills(log_blocks, position, direction, length, cross_section):
+def branch_fills(log_blocks, leaves_sample, position, direction, length, cross_section):
     """A generator yielding the fills for a branch"""
 
     def transfrom(x, y, z):
@@ -135,8 +135,9 @@ def branch_fills(log_blocks, position, direction, length, cross_section):
         yield f'fill {fill_lower} {fill_upper} {log_blocks[direction]}\n'
         # Caps the branch with leaves to hide any grain (most will be overwritten by smaller
         # branches).
-        cap_voxel = transfrom(lower_x, lower_y, length)
-        yield leaves_fill(log_blocks, cap_voxel, cap_voxel)
+        cap_lower = transfrom(lower_x, lower_y, length)
+        cap_upper = transfrom(upper_x, upper_y, length)
+        yield leaves_fill(leaves_sample, cap_lower, cap_upper)
 
 
 def generate(settings):
@@ -166,5 +167,5 @@ def generate(settings):
                 for fill in leaves_fills(leaves_sample, *branch):
                     file.write(fill)
                 # generate the fills for a branch
-                for fill in branch_fills(log_blocks, *branch):
+                for fill in branch_fills(log_blocks, leaves_sample, *branch):
                     file.write(fill)
