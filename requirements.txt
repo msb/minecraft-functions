@@ -1,0 +1,8 @@
+docopts
+geddit
+pyyaml
+dpath
+numpy
+scipy
+NBT
+bedrock @ https://github.com/msb/bedrock/tarball/master#bedrock-0.1

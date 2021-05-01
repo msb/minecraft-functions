@@ -1,4 +1,6 @@
-*.env
-*.json
-backend.tf
-locals.tf
+*.pyc
+*.egg-info
+venv
+.venv
+output/
+local.yaml

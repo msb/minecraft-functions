@@ -14,7 +14,7 @@ def load_requirements():
             if line.strip() != '' and not line.strip().startswith('#')
         ]
 
-
+print(load_requirements())
 setup(
     name='minecraftfunctions',
     version='0.0.1',
