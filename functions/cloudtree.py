@@ -129,14 +129,14 @@ def branch_fills(log_blocks, leaves_sample, position, direction, length, cross_s
         return np.add(position, DIRECTIONS[direction].dot(np.array((x, y, z, 1))))
 
     # convert each cross section rectangle to a block range and thence a fill
-    for (lower_x, lower_y), (upper_x, upper_y) in CROSS_SECTIONS[cross_section]:
-        fill_lower = fill_point(*transfrom(lower_x, lower_y, 0))
-        fill_upper = fill_point(*transfrom(upper_x, upper_y, length - 1))
+    for lower, upper in CROSS_SECTIONS[cross_section]:
+        fill_lower = fill_point(*transfrom(*lower, 0))
+        fill_upper = fill_point(*transfrom(*upper, length - 1))
         yield f'fill {fill_lower} {fill_upper} {log_blocks[direction]}\n'
         # Caps the branch with leaves to hide any grain (most will be overwritten by smaller
         # branches).
-        cap_lower = transfrom(lower_x, lower_y, length)
-        cap_upper = transfrom(upper_x, upper_y, length)
+        cap_lower = transfrom(*lower, length)
+        cap_upper = transfrom(*upper, length)
         yield leaves_fill(leaves_sample, cap_lower, cap_upper)
 
 
