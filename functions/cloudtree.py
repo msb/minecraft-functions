@@ -65,12 +65,17 @@ def off_shoots(settings, position, direction, cross_section):
     Randomly choose 4 directions and remove the same and opposite directions (this will also
     create variation in the number of shoots).
     """
-    for new_direction in random.choices(range(len(DIRECTIONS)), k=4):
-        if new_direction not in (direction, OPPOSITE_DIRECTIONS[direction]):
-            # randomly select a somewhat smaller cross-section and yield that off-shoot
-            # (and it's shoots).
-            new_cross_section = random.randrange(max(0, cross_section - 3), cross_section + 1)
-            yield from branches(settings, position, new_direction, new_cross_section)
+    if cross_section >= 0:
+        # always create a smaller branch in the same direction
+        yield from branches(settings, position, direction, cross_section)
+        if cross_section > 0:
+            # create smaller branches in random directions
+            for new_direction in random.choices(range(len(DIRECTIONS)), k=4):
+                if new_direction not in (direction, OPPOSITE_DIRECTIONS[direction]):
+                    # randomly select a somewhat smaller cross-section and yield that off-shoot
+                    # (and it's shoots).
+                    new_cross_section = random.randrange(max(0, cross_section - 4), cross_section)
+                    yield from branches(settings, position, new_direction, new_cross_section)
 
 
 def branches(settings, position, direction, cross_section, min_length=None):
@@ -88,12 +93,8 @@ def branches(settings, position, direction, cross_section, min_length=None):
     if end_position[2] >= dpath.get(settings, '/lowest_branch_end'):
         # yield the branch definition (if it's high up enough)
         yield (position, direction, length, cross_section)
-        if cross_section > 0:
-            # always create a smaller branch in the same direction
-            yield from branches(settings, end_position, direction, cross_section - 1)
-            if cross_section > 1:
-                # create smaller branches in random directions
-                yield from off_shoots(settings, end_position, direction, cross_section - 2)
+        # create smaller branches
+        yield from off_shoots(settings, end_position, direction, cross_section - 1)
 
 
 def fill_point(x, y, z, _):
