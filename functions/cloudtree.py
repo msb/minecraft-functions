@@ -110,7 +110,7 @@ def leaves_fill(leaves_sample, lower, upper):
     return f'fill {fill_point(*lower)} {fill_point(*upper)} {random.choice(leaves_sample)}\n'
 
 
-def leaves_fills(leaves_sample, position, direction, length, cross_section):
+def gen_leaf_fills(leaves_sample, position, direction, length, cross_section):
     """
     A generator yielding the fills for a random clump of leaves for the smallest 2 branch sizes.
     """
@@ -122,7 +122,7 @@ def leaves_fills(leaves_sample, position, direction, length, cross_section):
             yield leaves_fill(leaves_sample, lower, upper)
 
 
-def branch_fills(log_blocks, leaves_sample, position, direction, length, cross_section):
+def gen_branch_fills(log_blocks, leaves_sample, position, direction, length, cross_section):
     """A generator yielding the fills for a branch"""
 
     def transfrom(x, y, z):
@@ -159,14 +159,20 @@ def generate(settings):
 
     # create 10 cloud tree functions
     for tree in range(10):
+        branch_fills = []
+        leaf_fills = []
+
+        # generate the branches
+        for branch in branches(settings, start_pos, 0, len(CROSS_SECTIONS) - 1, trunk_min):
+            # generate the fills for a branch
+            branch_fills.extend(gen_branch_fills(log_blocks, leaves_sample, *branch))
+            # generate the fills for a branch's leaves
+            leaf_fills.extend(gen_leaf_fills(leaves_sample, *branch))
+
+        # write out the function - leaf fills before log fills so that the log fills win
         file_name = os.path.join(namespace, f'{tree}.mcfunction')
         with open(file_name, 'w') as file:
-            # generate the branches
-            for branch in branches(settings, start_pos, 0, len(CROSS_SECTIONS) - 1, trunk_min):
-                # generate the fills for a branch's leaves (before the branch so the branch
-                # overwrites the leaves if there is a clash)
-                for fill in leaves_fills(leaves_sample, *branch):
-                    file.write(fill)
-                # generate the fills for a branch
-                for fill in branch_fills(log_blocks, leaves_sample, *branch):
-                    file.write(fill)
+            for leaf_fill in leaf_fills:
+                file.write(leaf_fill)
+            for branch_fill in branch_fills:
+                file.write(branch_fill)
