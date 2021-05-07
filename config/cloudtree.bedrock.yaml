@@ -11,3 +11,10 @@ log_blocks:
     - "log {oak_ew}"
     - "log {oak_ew}"
     - "log {oak_ud}"
+
+# Horizontal log blocks
+horizontal_log_blocks:
+    - "log {oak_ns}"
+    - "log {oak_ew}"
+
+hanging_lantern: "lantern 1"

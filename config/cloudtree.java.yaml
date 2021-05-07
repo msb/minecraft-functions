@@ -12,5 +12,12 @@ log_blocks:
     - "minecraft:oak_log[axis=x]"
     - "minecraft:oak_log"
 
+# Horizontal log blocks
+horizontal_log_blocks:
+    - "minecraft:oak_log[axis=x]"
+    - "minecraft:oak_log[axis=z]"
+
+hanging_lantern: "minecraft:lantern[hanging=true]"
+
 # the namespace of the functions
 namespace: 'cloudtree/functions'

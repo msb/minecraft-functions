@@ -105,11 +105,6 @@ def fill_point(x, y, z, _):
     return f'~{int(x)} ~{int(z)} ~{int(y)}'
 
 
-def leaves_fill(leaves_sample, lower, upper):
-    """Returns a fill command for a block of `leaves` - randomly OAK or BIRCH."""
-    return f'fill {fill_point(*lower)} {fill_point(*upper)} {random.choice(leaves_sample)}\n'
-
-
 def gen_leaf_fills(leaves_sample, position, direction, length, cross_section):
     """
     A generator yielding the fills for a random clump of leaves for the smallest 2 branch sizes.
@@ -119,7 +114,8 @@ def gen_leaf_fills(leaves_sample, position, direction, length, cross_section):
         for _ in range(5):
             lower = [value + random.randrange(-2, 3) for value in end_position]
             upper = [value + random.randrange(-2, 3) for value in end_position]
-            yield leaves_fill(leaves_sample, lower, upper)
+            # yield randomly OAK or BIRCH.
+            yield (lower, upper, random.choice(leaves_sample))
 
 
 def gen_branch_fills(log_blocks, leaves_sample, position, direction, length, cross_section):
@@ -131,14 +127,22 @@ def gen_branch_fills(log_blocks, leaves_sample, position, direction, length, cro
 
     # convert each cross section rectangle to a block range and thence a fill
     for lower, upper in CROSS_SECTIONS[cross_section]:
-        fill_lower = fill_point(*transfrom(*lower, 0))
-        fill_upper = fill_point(*transfrom(*upper, length - 1))
-        yield f'fill {fill_lower} {fill_upper} {log_blocks[direction]}\n'
+        yield (transfrom(*lower, 0), transfrom(*upper, length - 1), log_blocks[direction])
         # Caps the branch with leaves to hide any grain (most will be overwritten by smaller
         # branches).
-        cap_lower = transfrom(*lower, length)
-        cap_upper = transfrom(*upper, length)
-        yield leaves_fill(leaves_sample, cap_lower, cap_upper)
+        yield (transfrom(*lower, length), transfrom(*upper, length), random.choice(leaves_sample))
+
+
+def get_fill_positions(lower, upper):
+    """FIXME"""
+    (lower_x, lower_y, lower_z, _) = lower
+    (upper_x, upper_y, upper_z, _) = upper
+    return [
+        (x, y, z)
+        for x in range(int(lower_x), int(upper_x) + 1)
+        for y in range(int(lower_y), int(upper_y) + 1)
+        for z in range(int(lower_z), int(upper_z) + 1)
+    ]
 
 
 def generate(settings):
@@ -153,12 +157,16 @@ def generate(settings):
     log_blocks = [
         resolve_symbols(settings, block) for block in dpath.get(settings, '/log_blocks')
     ]
+    horizontal_log_blocks = [
+        resolve_symbols(settings, block) for block in dpath.get(settings, '/horizontal_log_blocks')
+    ]
     leaves_sample = [
         resolve_symbols(settings, block) for block in dpath.get(settings, '/leaves_sample')
     ]
+    hanging_lantern = dpath.get(settings, '/hanging_lantern')
 
     # create 10 cloud tree functions
-    for tree in range(10):
+    for tree in range(1):
         branch_fills = []
         leaf_fills = []
 
@@ -169,10 +177,29 @@ def generate(settings):
             # generate the fills for a branch's leaves
             leaf_fills.extend(gen_leaf_fills(leaves_sample, *branch))
 
+        anything = set()
+        horizontal_logs = set()
+
+        print(horizontal_log_blocks)
+
+        for fills in (branch_fills, leaf_fills):
+            for lower, upper, block in fills:
+                positions = get_fill_positions(lower, upper)
+                anything.update(positions)
+                if block in horizontal_log_blocks:
+                    print(len(positions))
+                    horizontal_logs.update(positions)
+
+        print(len(horizontal_logs))
+
         # write out the function - leaf fills before log fills so that the log fills win
         file_name = os.path.join(namespace, f'{tree}.mcfunction')
         with open(file_name, 'w') as file:
-            for leaf_fill in leaf_fills:
-                file.write(leaf_fill)
-            for branch_fill in branch_fills:
-                file.write(branch_fill)
+            for lower, upper, block in leaf_fills:
+                file.write(f'fill {fill_point(*lower)} {fill_point(*upper)} {block}\n')
+            for lower, upper, block in branch_fills:
+                file.write(f'fill {fill_point(*lower)} {fill_point(*upper)} {block}\n')
+            for x, y, z in horizontal_logs:
+                lantern_position = (x, y, z - 1)
+                if lantern_position not in anything:
+                    file.write(f'setblock {fill_point(*lantern_position, 0)} {hanging_lantern}\n')
