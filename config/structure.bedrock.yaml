@@ -2,98 +2,110 @@
 
 strip_namespace: true
 
-common_data_values:
-    top_slot_bit: &top_slot_bit
-        'top_slot_bit:0': 0
-        'top_slot_bit:1': 8
-    wood_type: &wood_type
-        'wood_type:oak': 0
-        'wood_type:spruce': 1
-        'wood_type:birch': 2
-        'wood_type:jungle': 3
-        'wood_type:acacia': 4
-        'wood_type:dark_oak': 5
-    color: &color
-        'color:white': 0
-        'color:orange': 1
-        'color:magenta': 2
-        'color:light_blue': 3
-        'color:yellow': 4
-        'color:lime': 5
-        'color:pink': 6
-        'color:grey': 7
-        'color:light_grey': 8 # TODO both?
-        'color:silver': 8 # TODO both?
-        'color:cyan': 9
-        'color:purple': 10
-        'color:blue': 11
-        'color:brown': 12
-        'color:green': 13
-        'color:red': 14
-        'color:black': 15
-    direction: &direction
-        'direction:0': 0
-        'direction:1': 1
-        'direction:2': 2
-        'direction:3': 3
-    stairs: &stairs
-        'weirdo_direction:0': 0
-        'weirdo_direction:1': 1
-        'weirdo_direction:2': 2
-        'weirdo_direction:3': 3
-        'upside_down_bit:0': 0
-        'upside_down_bit:1': 4
-    facing_direction: &facing_direction
-        'facing_direction:0': 0
-        'facing_direction:1': 1
-        'facing_direction:2': 2
-        'facing_direction:3': 3
-        'facing_direction:4': 4
-        'facing_direction:5': 5
-    block: &block
-        'chisel_type:default': 0
-        'chisel_type:chiseled': 1
-        'chisel_type:lines': 2
-        'chisel_type:smooth': 3
-        'pillar_axis:x': 4 # TODO not sure
-        'pillar_axis:y': 16 # TODO not sure
-        'pillar_axis:z': 8 # TODO  not sure
-    door: &door
-        <<: *direction
-        "door_hinge_bit:0": 0
-        "door_hinge_bit:1": 4
-        "open_bit:0": 0
-        "open_bit:1": 0 # always create closed door
-        "upper_block_bit:0": 0
-        "upper_block_bit:1": null # don't render this block of the door
-    hanging: &hanging
-        'hanging:0': 0
-        'hanging:1': 1
-    torch: &torch
-        'torch_facing_direction:west': 1
-        'torch_facing_direction:east': 2
-        'torch_facing_direction:north': 3
-        'torch_facing_direction:south': 4
-    repeater: &repeater
-        <<: *direction
-        'repeater_delay:0': 0
-        'repeater_delay:1': 4
-        'repeater_delay:2': 8
-        'repeater_delay:3': 12
-    comparator: &comparator
-        <<: *direction
-        'output_subtract_bit:0': 0
-        'output_subtract_bit:1': 4
-        'output_lit_bit:0': 0
-        'output_lit_bit:1': 8
-    sandstone: &sandstone
-        'sand_stone_type:chiseled': 1
-        'sand_stone_type:cut': 2
-        'sand_stone_type:smooth': 3
-    button: &button
-        <<: *facing_direction
-        "button_pressed_bit:0": 0
-        "button_pressed_bit:1": 8
+.top_slot_bit: &top_slot_bit
+    'top_slot_bit:0': 0
+    'top_slot_bit:1': 8
+
+.wood_type: &wood_type
+    'wood_type:oak': 0
+    'wood_type:spruce': 1
+    'wood_type:birch': 2
+    'wood_type:jungle': 3
+    'wood_type:acacia': 4
+    'wood_type:dark_oak': 5
+
+.color: &color
+    'color:white': 0
+    'color:orange': 1
+    'color:magenta': 2
+    'color:light_blue': 3
+    'color:yellow': 4
+    'color:lime': 5
+    'color:pink': 6
+    'color:grey': 7
+    'color:light_grey': 8 # TODO both?
+    'color:silver': 8 # TODO both?
+    'color:cyan': 9
+    'color:purple': 10
+    'color:blue': 11
+    'color:brown': 12
+    'color:green': 13
+    'color:red': 14
+    'color:black': 15
+
+.direction: &direction
+    'direction:0': 0
+    'direction:1': 1
+    'direction:2': 2
+    'direction:3': 3
+
+.stairs: &stairs
+    'weirdo_direction:0': 0
+    'weirdo_direction:1': 1
+    'weirdo_direction:2': 2
+    'weirdo_direction:3': 3
+    'upside_down_bit:0': 0
+    'upside_down_bit:1': 4
+
+.facing_direction: &facing_direction
+    'facing_direction:0': 0
+    'facing_direction:1': 1
+    'facing_direction:2': 2
+    'facing_direction:3': 3
+    'facing_direction:4': 4
+    'facing_direction:5': 5
+
+.block: &block
+    'chisel_type:default': 0
+    'chisel_type:chiseled': 1
+    'chisel_type:lines': 2
+    'chisel_type:smooth': 3
+    'pillar_axis:x': 4 # TODO not sure
+    'pillar_axis:y': 16 # TODO not sure
+    'pillar_axis:z': 8 # TODO  not sure
+
+.door: &door
+    <<: *direction
+    "door_hinge_bit:0": 0
+    "door_hinge_bit:1": 4
+    "open_bit:0": 0
+    "open_bit:1": 0 # always create closed door
+    "upper_block_bit:0": 0
+    "upper_block_bit:1": null # don't render this block of the door
+
+.hanging: &hanging
+    'hanging:0': 0
+    'hanging:1': 1
+
+.torch: &torch
+    'torch_facing_direction:west': 1
+    'torch_facing_direction:east': 2
+    'torch_facing_direction:north': 3
+    'torch_facing_direction:south': 4
+
+.repeater: &repeater
+    <<: *direction
+    'repeater_delay:0': 0
+    'repeater_delay:1': 4
+    'repeater_delay:2': 8
+    'repeater_delay:3': 12
+
+.comparator: &comparator
+    <<: *direction
+    'output_subtract_bit:0': 0
+    'output_subtract_bit:1': 4
+    'output_lit_bit:0': 0
+    'output_lit_bit:1': 8
+
+.sandstone: &sandstone
+    'sand_stone_type:chiseled': 1
+    'sand_stone_type:cut': 2
+    'sand_stone_type:smooth': 3
+
+.button: &button
+    <<: *facing_direction
+    "button_pressed_bit:0": 0
+    "button_pressed_bit:1": 8
 
 
 data_value_map:
