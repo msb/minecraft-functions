@@ -107,12 +107,19 @@ strip_namespace: true
     "button_pressed_bit:0": 0
     "button_pressed_bit:1": 8
 
+.trapdoor: &trapdoor
+    <<: *direction
+    "upside_down_bit:0": 0
+    "upside_down_bit:1": 4
+    "open_bit:0": 0
+    "open_bit:1": 8
+
 
 data_value_map:
     sandstone:
-        <<: *sandstone
+        *sandstone
     red_sandstone:
-        <<: *sandstone
+        *sandstone
     hopper:
         <<: *facing_direction
         "toggle_bit:0": 0
@@ -129,8 +136,38 @@ data_value_map:
         <<: *facing_direction
         'powered_bit:0': 0
         'powered_bit:1': 8
+    white_glazed_terracotta:
+        *facing_direction
+    orange_glazed_terracotta:
+        *facing_direction
+    magenta_glazed_terracotta:
+        *facing_direction
+    light_blue_glazed_terracotta:
+        *facing_direction
+    yellow_glazed_terracotta:
+        *facing_direction
+    lime_glazed_terracotta:
+        *facing_direction
     pink_glazed_terracotta:
-        <<: *facing_direction
+        *facing_direction
+    gray_glazed_terracotta:
+        *facing_direction
+    silver_glazed_terracotta:
+        *facing_direction
+    cyan_glazed_terracotta:
+        *facing_direction
+    purple_glazed_terracotta:
+        *facing_direction
+    blue_glazed_terracotta:
+        *facing_direction
+    brown_glazed_terracotta:
+        *facing_direction
+    green_glazed_terracotta:
+        *facing_direction
+    red_glazed_terracotta:
+        *facing_direction
+    black_glazed_terracotta:
+        *facing_direction
     stone_slab:
         'stone_slab_type:smooth_stone': 0
         'stone_slab_type:sandstone': 1
@@ -148,19 +185,19 @@ data_value_map:
         <<: *wood_type
         <<: *top_slot_bit
     lantern:
-        <<: *hanging
+        *hanging
     soul_lantern:
-        <<: *hanging
+        *hanging
     wool:
-        <<: *color
+        *color
     stained_hardened_clay:
-        <<: *color
+        *color
     concrete:
-        <<: *color
+        *color
     stained_glass_pane:
-        <<: *color
+        *color
     stained_glass:
-        <<: *color
+        *color
     redstone_wire:
         'redstone_signal:0': 0
         'redstone_signal:1': 1
@@ -179,17 +216,17 @@ data_value_map:
         'redstone_signal:14': 14
         'redstone_signal:15': 15
     powered_repeater:
-        <<: *repeater
+        *repeater
     unpowered_repeater:
-        <<: *repeater
+        *repeater
     powered_comparator:
-        <<: *comparator
+        *comparator
     unpowered_comparator:
-        <<: *comparator
+        *comparator
     sticky_piston:
-        <<: *facing_direction
+        *facing_direction
     piston:
-        <<: *facing_direction
+        *facing_direction
     water:
         'liquid_depth:0': 0
         'liquid_depth:1': 1
@@ -208,11 +245,11 @@ data_value_map:
         'liquid_depth:14': 14
         'liquid_depth:15': 15
     fence:
-        <<: *wood_type
+        *wood_type
     carpet:
-        <<: *color
+        *color
     planks:
-        <<: *wood_type
+        *wood_type
     flower_pot:
         'update_bit:0': 0
         'update_bit:1': 1
@@ -252,9 +289,9 @@ data_value_map:
         'dirt_type:normal': 0
         'dirt_type:coarse': 1
     quartz_block:
-        <<: *block
+        *block
     purpur_block:
-        <<: *block
+        *block
     torch:
         <<: *torch
         'torch_facing_direction:up': 5
@@ -265,93 +302,119 @@ data_value_map:
         <<: *torch
         'torch_facing_direction:top': 5
     oak_stairs:
-        <<: *stairs
+        *stairs
     spruce_stairs:
-        <<: *stairs
+        *stairs
     birch_stairs:
-        <<: *stairs
+        *stairs
     jungle_stairs:
-        <<: *stairs
+        *stairs
     acacia_stairs:
-        <<: *stairs
+        *stairs
     dark_oak_stairs:
-        <<: *stairs
+        *stairs
     crimson_stairs:
-        <<: *stairs
+        *stairs
     warped_stairs:
-        <<: *stairs
+        *stairs
     normal_stone_stairs:
-        <<: *stairs
+        *stairs
     granite_stairs:
-        <<: *stairs
+        *stairs
     polished_granite_stairs:
-        <<: *stairs
+        *stairs
     diorite_stairs:
-        <<: *stairs
+        *stairs
     polished_diorite_stairs:
-        <<: *stairs
+        *stairs
     andesite_stairs:
-        <<: *stairs
+        *stairs
     polished_andesite_stairs:
-        <<: *stairs
+        *stairs
     stone_stairs:
-        <<: *stairs
+        *stairs
     mossy_cobblestone_stairs:
-        <<: *stairs
+        *stairs
     stone_brick_stairs:
-        <<: *stairs
+        *stairs
     mossy_stone_brick_stairs:
-        <<: *stairs
+        *stairs
     brick_stairs:
-        <<: *stairs
+        *stairs
     end_brick_stairs:
-        <<: *stairs
+        *stairs
     nether_brick_stairs:
-        <<: *stairs
+        *stairs
     red_nether_brick_stairs:
-        <<: *stairs
+        *stairs
     sandstone_stairs:
-        <<: *stairs
+        *stairs
     smooth_sandstone_stairs:
-        <<: *stairs
+        *stairs
     red_sandstone_stairs:
-        <<: *stairs
+        *stairs
     smooth_red_sandstone_stairs:
-        <<: *stairs
+        *stairs
     quartz_stairs:
-        <<: *stairs
+        *stairs
     smooth_quartz_stairs:
-        <<: *stairs
+        *stairs
     purpur_stairs:
-        <<: *stairs
+        *stairs
     prismarine_stairs:
-        <<: *stairs
+        *stairs
     prismarine_bricks_stairs:
-        <<: *stairs
+        *stairs
     dark_prismarine_stairs:
-        <<: *stairs
+        *stairs
     blackstone_stairs:
-        <<: *stairs
+        *stairs
     polished_blackstone_stairs:
-        <<: *stairs
+        *stairs
     polished_blackstone_brick_stairs:
-        <<: *stairs
-    crimson_door:
-        <<: *door
+        *stairs
+    iron_door:
+        *door
+    wooden_door:
+        *door
+    spruce_door:
+        *door
+    birch_door:
+        *door
+    jungle_door:
+        *door
+    acacia_door:
+        *door
     dark_oak_door:
-        <<: *door
+        *door
+    crimson_door:
+        *door
+    warped_door:
+        *door
     chain:
         'pillar_axis:x': 2
         'pillar_axis:y': 4
         'pillar_axis:z': 8
     furnace:
-        <<: *facing_direction
+        *facing_direction
     chest:
-        <<: *facing_direction
+        *facing_direction
+    oak_wall_sign:
+        *facing_direction
+    spruce_wall_sign:
+        *facing_direction
+    birch_wall_sign:
+        *facing_direction
+    jungle_wall_sign:
+        *facing_direction
     acacia_wall_sign:
-        <<: *facing_direction
+        *facing_direction
+    dark_oak_wall_sign:
+        *facing_direction
+    crimson_wall_sign:
+        *facing_direction
     warped_wall_sign:
-        <<: *facing_direction
+        *facing_direction
     soul_campfire:
         <<: *direction
         "extinguished:0": 0
@@ -369,10 +432,26 @@ data_value_map:
         "structure_block_type:save": null
     structure_void:
         "structure_void_type:void": null
+    stone_button:
+        *button
     wooden_button:
-        <<: *button
+        *button
+    spruce_button:
+        *button
+    birch_button:
+        *button
+    jungle_button:
+        *button
+    acacia_button:
+        *button
+    dark_oak_button:
+        *button
+    crimson_button:
+        *button
+    warped_button:
+        *button
     polished_blackstone_button:
-        <<: *button
+        *button
     tnt:
         "allow_underwater_bit:0": 0
         "allow_underwater_bit:1": 1
@@ -383,12 +462,26 @@ data_value_map:
         "stone_brick_type:mossy": 2
         "stone_brick_type:chiseled": 3
         "stone_brick_type:smooth": 4
+    iron_trapdoor:
+        <<: *trapdoor
+    wooden_trapdoor:
+        <<: *trapdoor
+    spruce_trapdoor:
+        <<: *trapdoor
     birch_trapdoor:
-        <<: *direction
-        "upside_down_bit:0": 0
-        "upside_down_bit:1": 4
-        "open_bit:0": 0
-        "open_bit:1": 8
+        <<: *trapdoor
+    jungle_trapdoor:
+        <<: *trapdoor
+    acacia_trapdoor:
+        <<: *trapdoor
+    dark_oak_trapdoor:
+        <<: *trapdoor
+    crimson_trapdoor:
+        <<: *trapdoor
+    warped_trapdoor:
+        <<: *trapdoor
+    birch_trapdoor:
+        <<: *trapdoor
 
 rotation_groups:
     - ['direction:0', 'direction:1', 'direction:2', 'direction:3']
@@ -398,8 +491,23 @@ rotation_groups:
     - ["rail_direction:0", "rail_direction:1", "rail_direction:0", "rail_direction:1"]
     - ["rail_direction:2", "rail_direction:5", "rail_direction:4", "rail_direction:3"]
 
+.trapdoor_rotation_group: &trapdoor_rotation_group
+    - 'direction:2'
+    - 'direction:1'
+    - 'direction:3'
+    - 'direction:0'
+
 exceptional_rotation_groups:
-    birch_trapdoor: ['direction:2', 'direction:1', 'direction:3', 'direction:0']
+    iron_trapdoor:     *trapdoor_rotation_group
+    wooden_trapdoor:   *trapdoor_rotation_group
+    spruce_trapdoor:   *trapdoor_rotation_group
+    birch_trapdoor:    *trapdoor_rotation_group
+    jungle_trapdoor:   *trapdoor_rotation_group
+    acacia_trapdoor:   *trapdoor_rotation_group
+    dark_oak_trapdoor: *trapdoor_rotation_group
+    crimson_trapdoor:  *trapdoor_rotation_group
+    warped_trapdoor:   *trapdoor_rotation_group
+    birch_trapdoor:    *trapdoor_rotation_group
 
 order_values:
     "lantern": 100
