@@ -90,6 +90,11 @@ common_data_values:
         'sand_stone_type:chiseled': 1
         'sand_stone_type:cut': 2
         'sand_stone_type:smooth': 3
+    button: &button
+        <<: *facing_direction
+        "button_pressed_bit:0": 0
+        "button_pressed_bit:1": 8
+
 
 data_value_map:
     sandstone:
@@ -112,6 +117,8 @@ data_value_map:
         <<: *facing_direction
         'powered_bit:0': 0
         'powered_bit:1': 8
+    pink_glazed_terracotta:
+        <<: *facing_direction
     stone_slab:
         'stone_slab_type:smooth_stone': 0
         'stone_slab_type:sandstone': 1
@@ -351,9 +358,9 @@ data_value_map:
     structure_void:
         "structure_void_type:void": null
     wooden_button:
-        <<: *facing_direction
-        "button_pressed_bit:0": 0
-        "button_pressed_bit:1": 8
+        <<: *button
+    polished_blackstone_button:
+        <<: *button
     tnt:
         "allow_underwater_bit:0": 0
         "allow_underwater_bit:1": 1
@@ -364,6 +371,12 @@ data_value_map:
         "stone_brick_type:mossy": 2
         "stone_brick_type:chiseled": 3
         "stone_brick_type:smooth": 4
+    birch_trapdoor:
+        <<: *direction
+        "upside_down_bit:0": 0
+        "upside_down_bit:1": 4
+        "open_bit:0": 0
+        "open_bit:1": 8
 
 rotation_groups:
     - ['direction:0', 'direction:1', 'direction:2', 'direction:3']
@@ -372,6 +385,9 @@ rotation_groups:
     - ['torch_facing_direction:north', 'torch_facing_direction:east', 'torch_facing_direction:south', 'torch_facing_direction:west']
     - ["rail_direction:0", "rail_direction:1", "rail_direction:0", "rail_direction:1"]
     - ["rail_direction:2", "rail_direction:5", "rail_direction:4", "rail_direction:3"]
+
+exceptional_rotation_groups:
+    birch_trapdoor: ['direction:2', 'direction:1', 'direction:3', 'direction:0']
 
 order_values:
     "lantern": 100

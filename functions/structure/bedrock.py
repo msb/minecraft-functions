@@ -22,6 +22,9 @@ VOID_AIR_INSTRUCTION = 'void_air'
 # structures and the namespaces they belong to.
 WORLD_INDEX_VOLUME = ((-1, 0, -1), (1, 255, 1))
 
+# Used to denote a rotation group that can apply to any block's data value.
+ROTATION_GROUP_WILDCARD = "*"
+
 
 class Plan:
     """
@@ -85,14 +88,18 @@ def scan_volume(volume_lower, volume_upper):
                 yield (x, y, z)
 
 
-def add_data_values(rotation_group_map, data_value_map_for_block, data_value_name, data_values):
+def add_data_values(
+    block_name, rotation_group_map, data_value_map_for_block, data_value_name, data_values
+):
     """
     For a block's given `data_value_name`, this function adds it's data value to the current
     `data_values`. If `data_value_name` has a rotation group, `data_values` is expanded to a list
     of 4 data values and the rotation group values are added to each item.
     """
-    if data_value_name in rotation_group_map:
-        rotation_group = rotation_group_map[data_value_name]
+    def add_rotation_group_data_values(rotation_group):
+        """
+        Add data values for a particular rotation group.
+        """
         # find the match `data_value_name` in the `rotation_group` and start from there.
         index = rotation_group.index(data_value_name)
         return [
@@ -101,6 +108,15 @@ def add_data_values(rotation_group_map, data_value_map_for_block, data_value_nam
             data_values[0] + data_value_map_for_block[rotation_group[group_index % 4]]
             for group_index in range(index, index + 4)
         ]
+
+    # first check if there is a rotation group specific to the block
+    if (block_name, data_value_name) in rotation_group_map:
+        return add_rotation_group_data_values(rotation_group_map[(block_name, data_value_name)])
+    # then check if there is a rotation group that just matches the data value name
+    elif (ROTATION_GROUP_WILDCARD, data_value_name) in rotation_group_map:
+        return add_rotation_group_data_values(
+            rotation_group_map[(ROTATION_GROUP_WILDCARD, data_value_name)]
+        )
 
     return [
         data_value + data_value_map_for_block[data_value_name]
@@ -142,7 +158,7 @@ def get_block_name(strip_namespace, data_value_map, rotation_group_map, block):
             data_values = None
             break
         data_values = add_data_values(
-            rotation_group_map, data_value_map_for_block, data_value_name, data_values
+            name, rotation_group_map, data_value_map_for_block, data_value_name, data_values
         )
 
     if data_values is None:
@@ -215,10 +231,18 @@ def convert(path_to_save, path_to_functions, settings):
         data_value_map = settings['data_value_map']
         strip_namespace = settings.get('strip_namespace')
 
-        # create a map of the rotation group, keyed of the groups constituent data value names.
+        # Create a map of the rotation groups, keyed on a tuple of the block's name and the group's
+        # constituent data value names.
         rotation_group_map = {
-            item: group for group in settings.get('rotation_groups', []) for item in group
+            (block_name, item): group
+            for block_name, group in settings.get('exceptional_rotation_groups', {}).items()
+            for item in group
         }
+        # Update with rotation groups that are not specific to a particular block.
+        rotation_group_map.update({
+            (ROTATION_GROUP_WILDCARD, item): group
+            for group in settings.get('rotation_groups', []) for item in group
+        })
 
         def generate_volume(volume_lower, volume_upper, plans):
             """
